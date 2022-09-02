@@ -2,7 +2,7 @@
 
 int main() {
     char str[100];
-    int suma = 0, i=0;
+   int suma = 0, i=0;
     printf("Cadena de texto: ");
     scanf("%s", str);
 
