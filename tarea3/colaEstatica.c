@@ -16,16 +16,26 @@ void inicializar(struct cola *c) {
 }
 
 int colaVacia(struct cola *c) {
-    return c->frente == c->atras;
+    if (c->frente == c->atras ) {
+        printf("La cola esta vacia. \n");
+        return 1;
+    } else {
+        return 0;
+    }
 }
 
 int colaLlena(struct cola *c) {
-    return c->atras == MAX;
+    if (c->atras == MAX) {
+        printf("La cola esta llena. \n");
+        return 1;
+    } else {
+        return 0;
+    }
 }
 
 void queue(struct cola *c, int numero) {
+    printf("Nuevo elemento en la cola: %d\n", numero);
     if (colaLlena(c)) {
-        printf("Cola llena.\n");
         return;
     }
     c->valores[c->atras] = numero;
@@ -43,6 +53,12 @@ void dequeue(struct cola *c) {
     }
 }
 
+void cuadrar(struct cola *c) {
+    for (int i = 0; i <= MAX; i++) {
+        c->valores[i] = c->valores[i] * c->valores[i];
+    }
+}
+
 void mostrarElementos(struct cola *c) {
     if(colaVacia(c)) {
         printf("Cola vacia.\n");
@@ -57,13 +73,14 @@ int main() {
     srand(time(NULL));
     int num = 0;
     struct cola c;
+    inicializar(&c);
     for (int i = 0; i < MAX; i++) {
         num = (rand() % 5) + 1;
         queue(&c, num);
     }
+    printf("Elementos de la cola: \n");
     mostrarElementos(&c);
-    for (int i = 0; i < MAX; i++) {
-        c.valores[i] = c.valores[i] * c.valores[i];
-    }
+    cuadrar(&c);
+    printf("Elementos cuadrados de la cola: \n");
     mostrarElementos(&c);
 }
