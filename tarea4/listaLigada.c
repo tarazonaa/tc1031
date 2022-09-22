@@ -27,7 +27,19 @@ void longitudLista() {
     printf("La longitud de la lista es: %d", i);
 }
 
+void pushInicio(int valor) {
+    struct nodo *nuevo = malloc(sizeof(struct nodo));
+    if (nuevo == NULL) {
+        printf("No hay memoria disponible");
+    } else {
+        nuevo->valor = valor;
+        nuevo->siguiente = primero;
+        primero = nuevo;
+    }
+}
+
 void pushFinal(int valor) {
+    printf("Nuevo elemento: %d", valor);
     struct nodo *nuevo = malloc(sizeof(struct nodo));
     if(nuevo == NULL) {
         printf("No hay memoria disponible!");
@@ -35,7 +47,7 @@ void pushFinal(int valor) {
     }
     if(listaVacia()) {
         nuevo->valor = valor;
-        nuevo->siguiente = NULL;
+        nuevo->siguiente = primero;
         primero = nuevo;
         return;
     }  
@@ -87,17 +99,82 @@ void imprimirLista() {
     }
 }
 
+void repeticion(int numero) {
+    struct nodo *temp;
+    int i = 0;
+    int pos = 0;
+    temp = primero;
+    while(temp != NULL) {
+        if(temp->valor == numero) {
+            i++;
+            printf("Posicion: %d", pos);
+        }
+        temp = temp->siguiente;
+        pos++;
+    }
+    printf("El numero %d se repite %d veces.", numero, i);
+}
+
+void eliminarPares() {
+    struct nodo *temp;
+    temp = primero;
+    while(temp != NULL) {
+        if(temp->valor % 2 == 0) {
+            printf("Se elimino el nodo: %d", temp->valor);
+            eliminarLista(temp->valor);
+        }
+        temp = temp->siguiente;
+    }
+}
+
+void eliminarValor(int valor) {
+    struct nodo *temp;
+    temp = primero;
+    while(temp != NULL) {
+        if(temp->valor == valor) {
+            printf("Se elimino el nodo: %d", temp->valor);
+            eliminarLista(temp->valor);
+        }
+        temp = temp->siguiente;
+    }
+}
+
+void promedio() {
+    struct nodo *temp;
+    temp = primero;
+    int i = 0;
+    int suma = 0;
+    while(temp != NULL) {
+        suma += temp->valor;
+        i++;
+        temp = temp->siguiente;
+    }
+    printf("El promedio de la lista es: %d", suma/i);
+}
+
 int main() {
     printf("Uso de una lista ligada: \n");
     printf("Inserciones \n");
     pushFinal(1);
-    pushFinal(2);
+    pushFinal(3);
+    pushFinal(5);
     pushFinal(3);
     pushFinal(4);
     pushFinal(5);
+    pushFinal(5);
+    pushFinal(5);
+    pushFinal(5);
+    pushFinal(5);
+    printf("Inserciones terminadas \n");
     imprimirLista();
     printf("Longitud: \n");
     longitudLista();
+    repeticion(3);
+    imprimirLista();
+    promedio();
+    imprimirLista();
+    eliminarValor(5);
+    imprimirLista();
     printf("\n");
     printf("Eliminacion de un nodo \n");
     eliminarLista(3);
