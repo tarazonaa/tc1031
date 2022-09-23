@@ -24,40 +24,40 @@ void longitudLista() {
         i++;
         temp = temp->siguiente;
     }
-    printf("La longitud de la lista es: %d", i);
+    printf("La longitud de la lista es: %d \n", i);
 }
 
-void pushInicio(int valor) {
+void pushInicio(int numero) {
     struct nodo *nuevo = malloc(sizeof(struct nodo));
     if (nuevo == NULL) {
         printf("No hay memoria disponible");
     } else {
-        nuevo->valor = valor;
+        nuevo->valor = numero;
         nuevo->siguiente = primero;
         primero = nuevo;
     }
 }
 
-void pushFinal(int valor) {
-    printf("Nuevo elemento: %d", valor);
+void pushFinal(int numero) {
+    printf("Nuevo elemento: %d \n", numero);
     struct nodo *nuevo = malloc(sizeof(struct nodo));
     if(nuevo == NULL) {
-        printf("No hay memoria disponible!");
+        printf("No hay memoria disponible! \n");
         return;
     }
-    if(listaVacia()) {
-        nuevo->valor = valor;
+    if(listaVacia() == 1) {
+        nuevo->valor = numero;
         nuevo->siguiente = primero;
         primero = nuevo;
         return;
     }  
-    struct nodo *actual;
-    struct nodo *anterior;
+    struct nodo *actual = primero;
+    struct nodo *anterior = NULL;
     while(actual != NULL) {
         anterior = actual;
         actual = actual->siguiente;
     }
-    nuevo->valor = valor;
+    nuevo->valor = numero;
     nuevo->siguiente = NULL;
     anterior->siguiente = nuevo;
 }
@@ -67,34 +67,36 @@ void eliminarLista(int numero) {
         printf("La lista ya esta vacia.");
         return;
     }
-    struct nodo *actual;
-    struct nodo *anterior;
+    struct nodo *actual = primero;
+    struct nodo *anterior = NULL;
     struct nodo *temp;
     while(actual != NULL) {
         if(actual->valor == numero) {
             if(anterior == NULL) {
                 temp = actual;
-                actual = actual->siguiente;
-                printf("Se elimino el nodo: %d", temp->valor);
+                primero = actual->siguiente;
+                printf("Se elimino el nodo: %d \n", temp->valor);
                 free(temp);
                 return;
             } else {
                 temp = actual;
-                printf("Se elimino el nodo: %d", temp->valor);
+                printf("Se elimino el nodo: %d \n", temp->valor);
                 anterior->siguiente = actual->siguiente;
                 free(temp);
                 return;
             }
         }
+        anterior = actual;
+        actual = actual->siguiente;
     }
     printf("No se encontro el nodo %d.", numero);
 }
 
 void imprimirLista() {
-    struct nodo *temp;
+    struct nodo *temp = primero;
     printf("Elementos en la lista:\n");
     while(temp != NULL) {
-        printf("%d", temp->valor);
+        printf("%d \n", temp->valor);
         temp = temp->siguiente;
     }
 }
@@ -107,12 +109,12 @@ void repeticion(int numero) {
     while(temp != NULL) {
         if(temp->valor == numero) {
             i++;
-            printf("Posicion: %d", pos);
+            printf("Posicion: %d \n", pos);
         }
         temp = temp->siguiente;
         pos++;
     }
-    printf("El numero %d se repite %d veces.", numero, i);
+    printf("El numero %d se repite %d veces. \n", numero, i);
 }
 
 void eliminarPares() {
@@ -127,11 +129,10 @@ void eliminarPares() {
     }
 }
 
-void eliminarValor(int valor) {
-    struct nodo *temp;
-    temp = primero;
+void eliminarValor(int numero) {
+    struct nodo *temp = primero;
     while(temp != NULL) {
-        if(temp->valor == valor) {
+        if(temp->valor == numero) {
             printf("Se elimino el nodo: %d", temp->valor);
             eliminarLista(temp->valor);
         }
@@ -149,7 +150,7 @@ void promedio() {
         i++;
         temp = temp->siguiente;
     }
-    printf("El promedio de la lista es: %d", suma/i);
+    printf("El promedio de la lista es: %d \n", suma/i);
 }
 
 int main() {
@@ -169,6 +170,7 @@ int main() {
     imprimirLista();
     printf("Longitud: \n");
     longitudLista();
+    printf("Repetición: \n");
     repeticion(3);
     imprimirLista();
     promedio();
