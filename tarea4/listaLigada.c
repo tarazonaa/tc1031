@@ -123,21 +123,22 @@ void repeticion(int numero) {
 void eliminarPares() {
     struct nodo *actual = primero;
     struct nodo *anterior = NULL;
-    struct nodo *temp;
     while(actual != NULL) {
+        struct nodo *temp = actual;
         if((actual->valor % 2) == 0) {
             if(anterior == NULL) {
-                temp = actual;
                 primero = actual->siguiente;
-                printf("Se elimino el nodo del principio: %d \n", temp->valor);
+                free(temp);
+                actual = primero;
             } else {
-                temp = actual;
-                printf("Se elimino el nodo: %d \n", temp->valor);
                 anterior->siguiente = actual->siguiente;
+                free(temp);
+                actual = anterior->siguiente;
             }
+        } else {
+            anterior = actual;
+            actual = actual->siguiente;
         }
-        anterior = actual;
-        actual = actual->siguiente;
     }
 }
 
