@@ -70,6 +70,7 @@ void eliminarLista(int numero) {
     struct nodo *actual = primero;
     struct nodo *anterior = NULL;
     struct nodo *temp;
+    int i = 0;
     while(actual != NULL) {
         if(actual->valor == numero) {
             if(anterior == NULL) {
@@ -88,8 +89,9 @@ void eliminarLista(int numero) {
         }
         anterior = actual;
         actual = actual->siguiente;
+        i++;
     }
-    printf("No se encontro el nodo %d.", numero);
+    printf("No se encontro el nodo %d. \n", numero);
 }
 
 void imprimirLista() {
@@ -117,40 +119,39 @@ void repeticion(int numero) {
     printf("El numero %d se repite %d veces. \n", numero, i);
 }
 
-void eliminarPares() {
-    struct nodo *temp;
-    temp = primero;
-    while(temp != NULL) {
-        if(temp->valor % 2 == 0) {
-            printf("Se elimino el nodo: %d", temp->valor);
-            eliminarLista(temp->valor);
-        }
-        temp = temp->siguiente;
-    }
-}
 
-void eliminarValor(int numero) {
-    struct nodo *temp = primero;
-    while(temp != NULL) {
-        if(temp->valor == numero) {
-            printf("Se elimino el nodo: %d", temp->valor);
-            eliminarLista(temp->valor);
+void eliminarPares() {
+    struct nodo *actual = primero;
+    struct nodo *anterior = NULL;
+    struct nodo *temp;
+    while(actual != NULL) {
+        if((actual->valor % 2) == 0) {
+            if(anterior == NULL) {
+                temp = actual;
+                primero = actual->siguiente;
+                printf("Se elimino el nodo del principio: %d \n", temp->valor);
+            } else {
+                temp = actual;
+                printf("Se elimino el nodo: %d \n", temp->valor);
+                anterior->siguiente = actual->siguiente;
+            }
         }
-        temp = temp->siguiente;
+        anterior = actual;
+        actual = actual->siguiente;
     }
 }
 
 void promedio() {
     struct nodo *temp;
     temp = primero;
-    int i = 0;
-    int suma = 0;
+    float i = 0;
+    float suma = 0;
     while(temp != NULL) {
         suma += temp->valor;
         i++;
         temp = temp->siguiente;
     }
-    printf("El promedio de la lista es: %d \n", suma/i);
+    printf("El promedio de la lista es: %.2f \n", suma/i);
 }
 
 int main() {
@@ -175,13 +176,23 @@ int main() {
     imprimirLista();
     promedio();
     imprimirLista();
-    eliminarValor(5);
-    imprimirLista();
     printf("\n");
     printf("Eliminacion de un nodo \n");
     eliminarLista(3);
     eliminarLista(4);
     eliminarLista(1);
+    imprimirLista();
+    printf("Insercion al inicio \n");
+    pushInicio(1);
+    pushInicio(2);
+    pushInicio(3);
+    pushInicio(2);
+    pushInicio(2);
+    pushInicio(2);
+    pushInicio(2);
+    imprimirLista();
+    printf("Eliminacion de pares \n");
+    eliminarPares();
     imprimirLista();
 
 }
