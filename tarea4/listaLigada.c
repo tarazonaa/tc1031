@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 struct nodo {
   int valor;
@@ -185,18 +186,12 @@ void eliminarOcurrencias(int numero) {
 }
 
 int main() {
+    srand(time(NULL));
   printf("Uso de una lista ligada: \n");
   printf("Inserciones \n");
-  pushFinal(1);
-  pushFinal(3);
-  pushFinal(5);
-  pushFinal(3);
-  pushFinal(4);
-  pushFinal(5);
-  pushFinal(5);
-  pushFinal(5);
-  pushFinal(5);
-  pushFinal(5);
+  for (int i = 0; i < 10; i++) {
+    pushFinal(rand() % 10);
+  }
   printf("Inserciones terminadas \n");
   imprimirLista();
   printf("Longitud: \n");
@@ -213,13 +208,9 @@ int main() {
   eliminarLista(1);
   imprimirLista();
   printf("Insercion al inicio \n");
-  pushInicio(1);
-  pushInicio(2);
-  pushInicio(3);
-  pushInicio(2);
-  pushInicio(2);
-  pushInicio(2);
-  pushInicio(2);
+  for (int i = 0; i < 10; i++) {
+    pushInicio(rand() % 10);
+  }
   imprimirLista();
   printf("Eliminacion de pares \n");
   eliminarPares();
