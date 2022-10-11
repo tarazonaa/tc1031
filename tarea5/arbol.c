@@ -136,19 +136,19 @@ int sumaImpares(struct nodo *inicio) {
   }
 }
 
-void leafNode(struct nodo *inicio) {
+void nodoHoja(struct nodo *inicio) {
   if (inicio == NULL) {
     return;
   } else {
     if (inicio->izq == NULL && inicio->der == NULL) {
       printf("%d ", inicio->valor);
     }
-    leafNode(inicio->izq);
-    leafNode(inicio->der);
+    nodoHoja(inicio->izq);
+    nodoHoja(inicio->der);
   }
 }
 
-void widthSearch(struct nodo *inicio) {
+void busquedaAnchura(struct nodo *inicio) {
   if (inicio == raiz) {
     printf("%d ", inicio->valor);
   }
@@ -158,14 +158,16 @@ void widthSearch(struct nodo *inicio) {
     printf("%d ", inicio->izq->valor);
   if (inicio->der != NULL)
     printf("%d ", inicio->der->valor);
-  widthSearch(inicio->izq);
-  widthSearch(inicio->der);
+  busquedaAnchura(inicio->izq);
+  busquedaAnchura(inicio->der);
 }
 
 int main() {
   printf("ARBOL BINARIO: \n");
   printf("Insertando valores: \n");
   insertarNodo(10);
+  insertarNodo(9);
+  insertarNodo(8);
   insertarNodo(5);
   insertarNodo(15);
   insertarNodo(3);
@@ -174,7 +176,7 @@ int main() {
   insertarNodo(18);
   printf("Raiz: %d\n", raiz->valor);
   printf("Operacion anchura: \n");
-  widthSearch(raiz);
+  busquedaAnchura(raiz);
   printf("\n");
   printf("Operacion preorden: \n");
   preOrder(raiz);
@@ -188,7 +190,7 @@ int main() {
   printf("Nodos pares: %d \n", sumaPares(raiz));
   printf("Nodos impares: %d \n", sumaImpares(raiz));
   printf("Nodos hoja: \n");
-  leafNode(raiz);
+  nodoHoja(raiz);
   printf("\n");
   printf("Operacion eliminar: \n");
   borrarNodo(raiz, 10);
