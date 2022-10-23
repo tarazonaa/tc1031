@@ -119,7 +119,7 @@ int sumaPares(struct nodo *inicio) {
     return 0;
   } else {
     if (inicio->valor % 2 == 0)
-      return 1 + sumaPares(inicio->izq) + sumaPares(inicio->der);
+      return inicio->valor + sumaPares(inicio->izq) + sumaPares(inicio->der);
     else
       return sumaPares(inicio->izq) + sumaPares(inicio->der);
   }
@@ -130,7 +130,7 @@ int sumaImpares(struct nodo *inicio) {
     return 0;
   } else {
     if (inicio->valor % 2 != 0)
-      return 1 + sumaImpares(inicio->izq) + sumaImpares(inicio->der);
+      return inicio->valor + sumaImpares(inicio->izq) + sumaImpares(inicio->der);
     else
       return sumaImpares(inicio->izq) + sumaImpares(inicio->der);
   }
@@ -148,20 +148,79 @@ void nodoHoja(struct nodo *inicio) {
   }
 }
 
-void busquedaAnchura(struct nodo *inicio) {
-  if (inicio == raiz) {
-    printf("%d ", inicio->valor);
-  }
-  if (inicio == NULL)
-    return;
-  if (inicio->izq != NULL)
-    printf("%d ", inicio->izq->valor);
-  if (inicio->der != NULL)
-    printf("%d ", inicio->der->valor);
-  busquedaAnchura(inicio->izq);
-  busquedaAnchura(inicio->der);
+
+/* int nivel(struct nodo *inicio, int valor) {
+    if (inicio == NULL) {
+        return 0;
+    } else {
+        if (inicio->valor == valor) {
+            return 1;
+        } else {
+            int izq = nivel(inicio->izq, valor);
+            int der = nivel(inicio->der, valor);
+            if (izq > der) {
+                return izq + 1;
+            } else {
+                return der + 1;
+            }
+        }
+    }
+}
+*/
+int altura(struct nodo *inicio) {
+    if (inicio == NULL) {
+        return 0;
+    } else {
+        int izq = altura(inicio->izq);
+        int der = altura(inicio->der);
+        if (izq > der) {
+            return izq + 1;
+        } else {
+            return der + 1;
+        }
+    }
 }
 
+void imprimirNivel(struct nodo *inicio, int nivel) {
+    if (inicio == NULL) {
+        return;
+    } else {
+        if (nivel == 1) {
+            printf("%d ", inicio->valor);
+        } else {
+            imprimirNivel(inicio->izq, nivel - 1);
+            imprimirNivel(inicio->der, nivel - 1);
+        }
+    }
+}
+
+void imprimirNiveles(struct nodo *inicio) {
+    int h = altura(inicio);
+    for (int i = 1; i <= h; i++) {
+        imprimirNivel(inicio, i);
+    }
+}
+/*
+void busquedaAnchura(struct nodo *inicio, int nivel) {
+    if (inicio == raiz) {
+        printf("%d ", inicio->valor);
+    }
+    if (inicio == NULL) 
+        return;
+    if(nivel == 1){
+        return;
+    } else if (nivel > 1) {
+        if (inicio->izq != NULL) 
+            printf("%d ", inicio->izq->valor);
+        if (inicio->der != NULL) 
+            printf("%d ", inicio->der->valor);
+        busquedaAnchura(inicio->izq, nivel - 1);
+        busquedaAnchura(inicio->der, nivel - 1);
+    } else {
+        return;
+    }
+}
+*/
 int main() {
   printf("ARBOL BINARIO: \n");
   printf("Insertando valores: \n");
@@ -171,12 +230,18 @@ int main() {
   insertarNodo(5);
   insertarNodo(15);
   insertarNodo(3);
+  insertarNodo(4);
+  insertarNodo(5);
+  insertarNodo(6);
   insertarNodo(7);
   insertarNodo(12);
   insertarNodo(18);
+  insertarNodo(19);
+  insertarNodo(21);
+  insertarNodo(22);
   printf("Raiz: %d\n", raiz->valor);
   printf("Operacion anchura: \n");
-  busquedaAnchura(raiz);
+  imprimirNiveles(raiz);
   printf("\n");
   printf("Operacion preorden: \n");
   preOrder(raiz);
@@ -189,6 +254,7 @@ int main() {
   printf("\n");
   printf("Nodos pares: %d \n", sumaPares(raiz));
   printf("Nodos impares: %d \n", sumaImpares(raiz));
+  printf("Nodos: %d\n", nodeCount(raiz));
   printf("Nodos hoja: \n");
   nodoHoja(raiz);
   printf("\n");
