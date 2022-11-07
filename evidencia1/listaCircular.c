@@ -196,6 +196,8 @@ int main() {
     printf("Eliminar repetidos: \n");
     eliminarRepetidos(6);
     imprimirLista();
+    eliminarLista();
+    listaVacia();
 
 
 }
