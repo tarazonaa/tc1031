@@ -134,6 +134,40 @@ void contarNodos() {
     printf("La cola tiene %d nodos \n", i);
 }
 
+void sumarMismoPeso(int peso) {
+    if(queueVacio()) {
+        printf("La cola esta vacia");
+        return;
+    }
+    int suma = 0;
+    struct queue *aux = tope;
+    while (aux != NULL) {
+        if(aux->weight == peso) {
+            suma += aux->valor;
+        }
+        aux = aux->siguiente;
+    }
+    printf("La suma de los nodos con peso %d es %d \n", peso, suma);
+}
+
+void promedioPorPeso(int peso) {
+    if(queueVacio()) {
+        printf("La cola esta vacia");
+        return;
+    }
+    int suma = 0;
+    int cantidad = 0;
+    struct queue *aux = tope;
+    while (aux != NULL) {
+        if(aux->weight == peso) {
+            suma += aux->valor;
+            cantidad++;
+        }
+        aux = aux->siguiente;
+    }
+    printf("El promedio de los nodos con peso %d es %d \n", peso, suma/cantidad);
+}
+
 int main() {
     push(1, 1);
     push(2, 2);
@@ -141,6 +175,15 @@ int main() {
     push(3, 3);
     push(5, 4);
     push(1, 3);
+    push(4, 5);
+    push(1, 4);
+    push(9, 6);
+    push(3, 7);
+    push(4, 3);
+    push(1, 3);
+    push(6, 3);
+    push(1, 6);
+    push(6, 6);
     printf("\n");
     imprimir();
     printf("\n");
@@ -158,6 +201,12 @@ int main() {
     printf("Contar nodos: \n");
     printf("\n");
     contarNodos();
+    printf("Promedio por pesos: \n");
+    printf("\n");
+    promedioPorPeso(3);
+    printf("Sumas de un peso especifico: \n");
+    printf("\n");
+    sumarMismoPeso(3);
     printf("\n");
     printf("Eliminar: \n");
     printf("\n");
