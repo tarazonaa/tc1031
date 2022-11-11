@@ -3,47 +3,71 @@
 
 struct queue {
     int valor;
-    float weight;
+    int weight;
     struct queue *siguiente;
 };
 
-struct queue *primero = NULL;
+struct queue *tope = NULL;
 
 int queueVacio() {
-    if(primero == NULL)
+    if(tope == NULL)
         return 1;
     else
         return 0;
 }
 
-void insertar(int valor, float weight) {
-    struct queue *nuevo = (struct queue *) malloc(sizeof(struct queue));
+void push(int valor, int weight) {
+    struct queue *nuevo = malloc(sizeof(struct queue));
+    if (nuevo == NULL)
+        printf("No hay memoria disponible");
     nuevo->valor = valor;
     nuevo->weight = weight;
-    if (queueVacio()) {
-        primero = nuevo;
-        primero->siguiente = NULL;
-    } else {
-        struct queue *aux = primero;
-        while (aux->siguiente->weight < weight) {
-            aux = aux->siguiente;
+    nuevo->siguiente = NULL;
+    if (queueVacio())
+        tope = nuevo;
+    else {
+        if(weight >= tope->weight) {
+            nuevo->siguiente = tope;
+            tope = nuevo;
         }
-        nuevo->siguiente = aux->siguiente;
-        aux->siguiente = nuevo;
+        else {
+            struct queue *aux = tope;
+            while (aux->siguiente != NULL && weight < aux->siguiente->weight)
+                aux = aux->siguiente;
+            nuevo->siguiente = aux->siguiente;
+            aux->siguiente = nuevo;
+        }
+    }
+    printf("Metiendo el numero %d con peso %d \n", valor, weight);
+}
+
+void pop() {
+    if (queueVacio())
+        printf("La cola esta vacia");
+    else {
+        printf("Sacando el numero %d con peso %d \n", tope->valor, tope->weight);
+        struct queue *aux = tope;
+        tope = tope->siguiente;
+        free(aux);
     }
 }
 
 void imprimir() {
-    struct queue *aux = primero;
+    struct queue *aux = tope;
+    printf("La lista contiene los siguientes elementos: \n");
     while (aux != NULL) {
-        printf("%d ", aux->valor);
+        printf("%d con peso %d \n", aux->valor, aux->weight);
         aux = aux->siguiente;
     }
 }
 
 int main() {
-    insertar(1, 1.0);
-    insertar(2, 2.0);
-    insertar(3, 3.0);
+    push(1, 1);
+    push(2, 2);
+    push(3, 4);
+    push(3, 3);
+    push(5, 4);
+    imprimir();
+    pop();
     imprimir();
 }

@@ -10,6 +10,27 @@ struct nodo {
 struct nodo *primero = NULL;
 struct nodo *ultimo = NULL;
 
+int longitud() {
+    int cont = 0;
+    struct nodo *aux = primero;
+    if (primero != NULL) {
+        do {
+            cont++;
+            aux = aux->siguiente;
+        } while (aux != primero);
+    }
+    return cont;
+}
+
+int listaVacia() {
+    if (primero == NULL) {
+        printf("La lista esta vacia");
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
 void insertar(int valor) {
     struct nodo *nuevo = (struct nodo *) malloc(sizeof(struct nodo));
     nuevo->valor = valor;
@@ -32,54 +53,87 @@ void insertar(int valor) {
 }
 
 void eliminar(int valor) {
+    if(listaVacia())
+        printf("No se puede eliminar un elemento de una lista circular vacia");
     struct nodo *actual = primero;
-    struct nodo *anterior = NULL;
+    struct nodo *anterior = actual->anterior;
+    struct nodo *siguiente = actual->siguiente;
+    struct nodo *temporal = NULL;
     printf("Eliminando un elemento de la lista circular: %d \n", valor);
-    if (primero != NULL) {
-        do {
-            if (actual->valor == valor) {
-                if (actual == primero) {
-                    primero = primero->siguiente;
-                    primero->anterior = ultimo;
-                    ultimo->siguiente = primero;
-                } else if (actual == ultimo) {
-                    ultimo = anterior;
-                    ultimo->siguiente = primero;
-                    primero->anterior = ultimo;
-                } else {
-                    anterior->siguiente = actual->siguiente;
-                    actual->siguiente->anterior = anterior;
-                }
+    while(1) {
+        if(actual->valor == valor) {
+            if(actual == primero) {
+                primero = primero->siguiente;
+                primero->anterior = ultimo;
+                ultimo->siguiente = primero;
+            } else if(actual == ultimo) {
+                ultimo = ultimo->anterior;
+                ultimo->siguiente = primero;
+                primero->anterior = ultimo;
+            } else {
+                anterior->siguiente = siguiente;
+                siguiente->anterior = anterior;
             }
+            temporal = actual;
+            actual = actual->siguiente;
+            free(temporal);
+            break;
+        } else {
             anterior = actual;
             actual = actual->siguiente;
-        } while (actual != primero);
+            siguiente = actual->siguiente;
+        }
     }
 }
 
-void eliminarRepetidos(int valor) {
-    struct nodo *actual = primero;
-    struct nodo *anterior = NULL;
-    printf("Eliminando todos los nodos de un elemento de la lista circular: %d \n", valor);
+
+void imprimirLista() {
+    printf("Los elementos en la lista son los siguientes: \n");
+    struct nodo *actual = (struct nodo *) malloc(sizeof(struct nodo));
+    actual = primero;
     if (primero != NULL) {
         do {
-            if (actual->valor == valor) {
-                if (actual == primero) {
-                    primero = primero->siguiente;
-                    primero->anterior = ultimo;
-                    ultimo->siguiente = primero;
-                } else if (actual == ultimo) {
-                    ultimo = anterior;
-                    ultimo->siguiente = primero;
-                    primero->anterior = ultimo;
-                } else {
-                    anterior->siguiente = actual->siguiente;
-                    actual->siguiente->anterior = anterior;
-                }
-            } 
-            anterior = actual;
+            printf("%d \n", actual->valor);
             actual = actual->siguiente;
         } while (actual != primero);
+    }
+    printf("\n");
+}
+
+void eliminarRepetidos(int valor) {
+    if(listaVacia())
+        printf("No se puede eliminar un elemento de una lista circular vacia");
+    struct nodo *actual = primero;
+    struct nodo *anterior = ultimo;
+    struct nodo *siguiente = primero->siguiente;
+    while(1) {
+        struct nodo *temporal = actual;
+        if(actual->valor == valor) {
+            if(actual == primero) {
+                printf("Se elimina el nodo del inicio de la lista: %d \n", actual->valor);
+                primero = primero->siguiente;
+                primero->anterior = ultimo;
+                ultimo->siguiente = primero;
+            } else if(actual == ultimo) {
+                printf("Se elimina el nodo del final de la lista: %d \n", actual->valor);
+                ultimo = ultimo->anterior;
+                ultimo->siguiente = primero;
+                primero->anterior = ultimo;
+            } else {
+                printf("Se elimina el nodo del medio de la lista: %d \n", actual->valor);
+                anterior->siguiente = siguiente;
+                siguiente->anterior = anterior;
+            }
+            free(temporal);
+            actual = siguiente;
+            siguiente = actual->siguiente;
+        } else {
+            anterior = actual;
+            actual = actual->siguiente;
+            siguiente = actual->siguiente;
+        }
+        if(actual == primero)
+            break;
     }
 }
 
@@ -143,13 +197,6 @@ void buscarNodo(int valor) {
     }
 }
 
-void listaVacia() {
-    if (primero == NULL) {
-        printf("La lista circular esta vacia \n");
-    } else {
-        printf("La lista circular no esta vacia \n");
-    }
-}
 
 void contarNodos() {
     struct nodo *actual = primero;
@@ -166,14 +213,37 @@ void contarNodos() {
     }
 }
 
-void imprimirLista() {
-    struct nodo *actual = (struct nodo *) malloc(sizeof(struct nodo));
-    actual = primero;
+int sumarPares() {
+    struct nodo *actual = primero;
+    int suma = 0;
     if (primero != NULL) {
         do {
-            printf("%d \n", actual->valor);
+            if (actual->valor % 2 == 0) {
+                suma += actual->valor;
+            }
             actual = actual->siguiente;
         } while (actual != primero);
+        return suma;
+    } else {
+        printf("La lista circular esta vacia \n");
+        return 0;
+    }
+}
+
+int contarImpares() {
+    struct nodo *actual = primero;
+    int contador = 0;
+    if (primero != NULL) {
+        do {
+            if (actual->valor % 2 != 0) {
+                contador++;
+            }
+            actual = actual->siguiente;
+        } while (actual != primero);
+        return contador;
+    } else {
+        printf("La lista circular esta vacia \n");
+        return 0;
     }
 }
 
@@ -185,16 +255,26 @@ int main() {
     insertar(3);
     insertar(4);
     insertar(5);
+    printf("\n");
     imprimirLista();
     agregarRepetidos(6, 3);
+    printf("\n");
     imprimirLista();
     buscarNodo(4);
+    printf("\n");
+    printf("La suma de los numeros pares es: %d \n", sumarPares());
+    printf("\n");
+    printf("Existen %d elementos impares en la lista circular \n", contarImpares());
+    printf("\n");
     contarNodos();
     printf("Eliminar: \n");
     eliminar(3);
     eliminar(1);
+    printf("\n");
+    imprimirLista();
     printf("Eliminar repetidos: \n");
     eliminarRepetidos(6);
+    printf("\n");
     imprimirLista();
     eliminarLista();
     listaVacia();
