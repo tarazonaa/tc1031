@@ -16,6 +16,29 @@ int queueVacio() {
         return 0;
 }
 
+
+void imprimir() {
+    if (queueVacio()) {
+        printf("La cola esta vacia");
+        return;
+    }
+    struct queue *aux = tope;
+    printf("La lista contiene los siguientes elementos: \n");
+    while (aux != NULL) {
+        printf("%d con peso %d \n", aux->valor, aux->weight);
+        aux = aux->siguiente;
+    }
+}
+
+void eliminar() {
+    struct queue *aux;
+    while (tope != NULL) {
+        aux = tope;
+        tope = tope->siguiente;
+        free(aux);
+    }
+}
+
 void push(int valor, int weight) {
     struct queue *nuevo = malloc(sizeof(struct queue));
     if (nuevo == NULL)
@@ -41,6 +64,51 @@ void push(int valor, int weight) {
     printf("Metiendo el numero %d con peso %d \n", valor, weight);
 }
 
+void pushConsecutivo(int valor, int weight, int cantidad) {
+    while(cantidad > 0) {
+        struct queue *nuevo = malloc(sizeof(struct queue));
+        if (nuevo == NULL)
+            printf("No hay memoria disponible");
+        nuevo->valor = valor;
+        nuevo->weight = weight;
+        nuevo->siguiente = NULL;
+        if (queueVacio())
+            tope = nuevo;
+        else {
+            if(weight >= tope->weight) {
+                nuevo->siguiente = tope;
+                tope = nuevo;
+            }
+            else {
+                struct queue *aux = tope;
+                while (aux->siguiente != NULL && weight < aux->siguiente->weight)
+                    aux = aux->siguiente;
+                nuevo->siguiente = aux->siguiente;
+                aux->siguiente = nuevo;
+            }
+        }
+        cantidad--;
+    }
+
+}
+
+void buscarNodo(int valor) {
+    if (queueVacio()) {
+        printf("La cola esta vacia");
+        return;
+    }
+    int i = 0;
+    struct queue *aux = tope;
+    while (aux != NULL) {
+        if(aux->valor == valor) {
+            printf("El numero %d esta en la cola con peso %d, en la posicion %d\n", valor, aux->weight, i);
+        }
+        aux = aux->siguiente;
+        i++;
+    }
+    printf("El nodo %d no esta en la cola \n", valor);
+}
+
 void pop() {
     if (queueVacio())
         printf("La cola esta vacia");
@@ -52,13 +120,18 @@ void pop() {
     }
 }
 
-void imprimir() {
-    struct queue *aux = tope;
-    printf("La lista contiene los siguientes elementos: \n");
-    while (aux != NULL) {
-        printf("%d con peso %d \n", aux->valor, aux->weight);
-        aux = aux->siguiente;
+void contarNodos() {
+    if(queueVacio()) {
+        printf("La cola esta vacia");
+        return;
     }
+    int i = 0;
+    struct queue *aux = tope;
+    while (aux != NULL) {
+        aux = aux->siguiente;
+        i++;
+    }
+    printf("La cola tiene %d nodos \n", i);
 }
 
 int main() {
@@ -67,7 +140,28 @@ int main() {
     push(3, 4);
     push(3, 3);
     push(5, 4);
+    push(1, 3);
+    printf("\n");
     imprimir();
+    printf("\n");
     pop();
+    printf("\n");
+    printf("Push consecutivos: \n");
+    printf("\n");
+    pushConsecutivo(5, 1, 3);
+    printf("\n");
+    imprimir();
+    printf("\n");
+    printf("Buscar nodos: \n");
+    printf("\n");
+    buscarNodo(5);
+    printf("Contar nodos: \n");
+    printf("\n");
+    contarNodos();
+    printf("\n");
+    printf("Eliminar: \n");
+    printf("\n");
+    eliminar();
+    printf("\n");
     imprimir();
 }
